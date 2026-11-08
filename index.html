@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projekt MK-ULTRA — Das Archiv</title>
+<meta name="description" content="Umfassendes, quellenbasiertes Archiv zum CIA-Mind-Control-Programm MK-ULTRA: Chronologie, Schlüsselfiguren, alle Subprojekte, Originaldokumente und Glossar.">
+<style>
+:root{
+  --bg:#0d0f12; --bg2:#12151a; --card:#171b21; --card2:#1c2129;
+  --border:#262d38; --border2:#313a47;
+  --text:#d8dee7; --muted:#8b95a5; --dim:#5c6675;
+  --accent:#e8b74a; --accent2:#c9973a;
+  --red:#c0392b; --red-dark:#1a1213;
+  --mono:'Courier New',ui-monospace,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(13,15,18,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:56px;overflow-x:auto;white-space:nowrap}
+.brand{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.5px;font-weight:bold}
+nav a.n{color:var(--muted);font-size:13px;padding:6px 2px}
+nav a.n:hover{color:var(--text);text-decoration:none}
+
+/* Header / Hero */
+header{position:relative;padding:72px 0 60px;border-bottom:1px solid var(--border);overflow:hidden;background:
+  radial-gradient(1200px 500px at 50% -20%,rgba(232,183,74,.08),transparent)}
+.stamp{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:5px 10px;border-radius:3px;margin-bottom:22px;opacity:.85}
+h1{font-size:clamp(30px,5.4vw,54px);line-height:1.08;font-weight:800;letter-spacing:-.5px;margin-bottom:18px}
+h1 .accent{color:var(--accent)}
+.lede{font-size:18px;color:var(--muted);max-width:720px}
+.redacted{background:var(--red);color:var(--red);border-radius:3px;padding:0 2px;user-select:none}
+
+/* Sections */
+section{padding:60px 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+h2{font-size:26px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+.sec-sub{color:var(--dim);font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+h3{font-size:17px;margin-bottom:8px;font-weight:700}
+
+/* Stat row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:30px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+.stat .num{font-size:30px;font-weight:800;color:var(--accent);font-family:var(--mono)}
+.stat .lbl{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* Timeline */
+.timeline{position:relative;margin-left:8px;padding-left:30px;border-left:2px solid var(--border2)}
+.tl-item{position:relative;padding:0 0 34px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-38px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tl-item.major::before{background:var(--red);box-shadow:0 0 0 4px rgba(192,57,43,.25)}
+.tl-date{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:1px}
+.tl-title{font-weight:700;margin:3px 0 4px}
+.tl-body{color:var(--muted);font-size:14.5px}
+
+/* Cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .15s}
+.card:hover{border-color:var(--border2)}
+.card .role{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.card p{color:var(--muted);font-size:14px;margin-top:6px}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;background:var(--card2);border:1px solid var(--border);color:var(--muted);padding:2px 8px;border-radius:20px;margin:2px 3px 0 0}
+
+/* Subprojects */
+.filters{margin:18px 0 8px}
+.filters input{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 14px;font-size:14px;font-family:var(--sans)}
+.filters input:focus{outline:none;border-color:var(--accent)}
+.sp-list{margin-top:14px}
+.sp{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+.sp.hidden{display:none}
+.sp-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sp-no{font-family:var(--mono);font-weight:bold;color:var(--accent);font-size:15px}
+.sp-name{font-weight:700;font-size:15px}
+.sp-meta{font-size:12.5px;color:var(--dim);font-family:var(--mono);margin-top:3px}
+.sp p{color:var(--muted);font-size:14px;margin-top:7px}
+.sp .red{color:var(--red);font-family:var(--mono);font-size:11.5px}
+
+/* Gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin-top:20px}
+.doc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .12s,border-color .12s}
+.doc:hover{transform:translateY(-3px);border-color:var(--accent2)}
+.doc img{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;object-position:top;background:#000}
+.doc .cap{padding:11px 13px;border-top:1px solid var(--border)}
+.doc .cap b{font-size:13px;display:block}
+.doc .cap span{font-size:11.5px;color:var(--dim);font-family:var(--mono)}
+
+/* Lightbox */
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;align-items:center;justify-content:center;padding:30px;flex-direction:column}
+#lb.show{display:flex}
+#lb img{max-width:92vw;max-height:78vh;border:1px solid var(--border2);border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#lb .cap{color:var(--muted);margin-top:14px;font-size:13px;text-align:center;max-width:700px}
+#lb .close{position:absolute;top:18px;right:24px;color:var(--text);font-size:30px;cursor:pointer;background:none;border:none}
+#lb a{display:inline-block;margin-top:10px;font-size:13px}
+
+/* Glossary */
+.glossary{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:20px}
+.gterm{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:15px 17px}
+.gterm .gt{font-family:var(--mono);color:var(--accent);font-weight:bold;font-size:14px}
+.gterm p{color:var(--muted);font-size:13.5px;margin-top:5px}
+
+/* Notes / sources */
+.note{background:var(--red-dark);border:1px solid #3a1d19;border-left:3px solid var(--red);border-radius:8px;padding:16px 18px;margin:26px 0;font-size:14px;color:#d9b3ad}
+.src{font-size:13.5px;color:var(--muted)}
+.src li{margin:8px 0;list-style:none;padding-left:20px;position:relative}
+.src li::before{content:'↗';position:absolute;left:0;color:var(--accent)}
+.src a{word-break:break-all}
+
+footer{padding:40px 0 60px;color:var(--dim);font-size:12.5px;text-align:center}
+footer .mono{font-family:var(--mono)}
+
+@media(max-width:600px){.grid{grid-template-columns:1fr}.glossary{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">MK-ULTRA ARCHIV</span>
+    <a class="n" href="#ueberblick">Überblick</a>
+    <a class="n" href="#chronologie">Chronologie</a>
+    <a class="n" href="#figuren">Figuren</a>
+    <a class="n" href="#subprojekte">Subprojekte</a>
+    <a class="n" href="#dokumente">Dokumente</a>
+    <a class="n" href="#glossar">Glossar</a>
+    <a class="n" href="#quellen">Quellen</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="stamp">Freigegeben · Declassified · FOIA</span>
+    <h1>Projekt <span class="accent">MK-ULTRA</span><br>Das geheime Mind-Control-Programm der CIA</h1>
+    <p class="lede">Von 1953 bis 1973 betrieb die CIA ein illegales Forschungsprogramm zur Bewusstseinskontrolle: heimliche LSD-Vergaben, Elektroschocks, Hypnose, sensorische Deprivation — an ahnungslosen Menschen. Dieses Archiv stellt Geschichte, Akteure, Subprojekte und die überlieferten Originaldokumente zusammen. Alle Inhalte stammen aus öffentlich zugänglichen, freigegebenen Quellen.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">149</div><div class="lbl">Subprojekte</div></div>
+      <div class="stat"><div class="num">1953–73</div><div class="lbl">Laufzeit</div></div>
+      <div class="stat"><div class="num">80+</div><div class="lbl">Institutionen</div></div>
+      <div class="stat"><div class="num">185</div><div class="lbl">Forscher (nicht-staatlich)</div></div>
+      <div class="stat"><div class="num">1973</div><div class="lbl">Aktenvernichtung</div></div>
+      <div class="stat"><div class="num">1977</div><div class="lbl">Aufdeckung</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="ueberblick">
+  <div class="wrap">
+    <h2>Überblick</h2>
+    <div class="sec-sub">Was MK-ULTRA war</div>
+    <p>Project MK-ULTRA (auch MKUltra) war ein verdecktes Forschungsprogramm der US-amerikanischen Central Intelligence Agency. Ziel war die Entwicklung von Techniken zur <strong>Kontrolle des menschlichen Geistes</strong> — eine „Wahrheitsdroge" für Verhöre, die Auslöschung und Neuprogrammierung von Gedächtnis, und ein Mittel gegen vermeintliche sowjetische, chinesische und nordkoreanische „Gehirnwäsche"-Methoden aus dem Koreakrieg.</p>
+    <p style="margin-top:12px">Die Methoden umfassten die heimliche Verabreichung hoher Dosen von <strong>LSD</strong> und anderen Drogen, Elektroschocks, Hypnose, sensorische Deprivation, Isolation und weitere Misshandlungen — häufig ohne Wissen oder Einwilligung der Versuchspersonen, darunter Gefangene, Psychiatriepatienten, Drogenabhängige, Prostituierte, Militärangehörige und ahnungslose Bürger.</p>
+    <div class="note">Das Programm lief unter wechselnden Decknamen: <strong>Project Bluebird</strong> (Truman-Ära) → <strong>Operation Artichoke</strong> (1951) → <strong>MK-ULTRA</strong> (1953) → Nachfolger <strong>MK-SEARCH</strong> (1964). Der Deckname „MK" steht für die CIA-Abteilung „Technical Services Staff", das Präfix steht für geheime Projekte.</div>
+    <h3 style="margin-top:20px">Die Eckdaten</h3>
+    <ul class="src">
+      <li><strong>13. April 1953:</strong> CIA-Direktor Allen Dulles genehmigt das Programm offiziell.</li>
+      <li><strong>Leitung:</strong> Der Chemiker Sidney Gottlieb, Chef des Technical Services Staff (TSS).</li>
+      <li><strong>Umfang:</strong> 149 Subprojekte, verteilt auf über 80 Institutionen und 185 nicht-staatliche Forscher.</li>
+      <li><strong>1973:</strong> CIA-Direktor Richard Helms ordnet die Vernichtung der Akten an; Gottlieb vernichtet sieben Kisten voller Unterlagen.</li>
+      <li><strong>1977:</strong> Ein Archivar findet bei einer FOIA-Anfrage sieben <em>verlegt</em> abgelegte Kisten mit Finanzunterlagen — sie entgingen der Vernichtung und machten das Programm öffentlich dokumentierbar.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="chronologie">
+  <div class="wrap">
+    <h2>Chronologie</h2>
+    <div class="sec-sub">1938 – 2025</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">1938</div><div class="tl-title">Albert Hofmann synthetisiert LSD</div><div class="tl-body">In den Sandoz-Laboren in Basel (Schweiz) wird Lysergsäurediethylamid erstmals synthetisiert. 1943 entdeckt Hofmann zufällig dessen psychoaktive Wirkung.</div></div>
+      <div class="tl-item"><div class="tl-date">1947–1950</div><div class="tl-title">Project Bluebird</div><div class="tl-body">Das ursprüngliche Mind-Control-Programm der Truman-Ära. Frühe Experimente unter Leitung von Morse Allen (Office of Security) an Gefangenen und Verdächtigen in geheimen US-Verhöreinrichtungen in Japan und Deutschland.</div></div>
+      <div class="tl-item"><div class="tl-date">1949</div><div class="tl-title">Erster US-amerikanischer LSD-„Trip"</div><div class="tl-body">Dr. Robert Hyde, stellvertretender Direktor des Boston Psychopathic Hospital, nimmt als erster Amerikaner LSD, nachdem das Krankenhaus Proben von Sandoz erhalten hatte.</div></div>
+      <div class="tl-item"><div class="tl-date">1951</div><div class="tl-title">Operation Artichoke</div><div class="tl-body">Allen Dulles wird Deputy Director und erweitert Bluebird unter dem neuen Namen Artichoke — nun unter Leitung von Gottlieb beim TSS. Fokus: „Gaswaffen", Gifte, Hypnose-Kontrolle durch Monotonklang, Gehirnerschütterung und Elektroschock.</div></div>
+      <div class="tl-item major"><div class="tl-date">13. April 1953</div><div class="tl-title">Dulles genehmigt MK-ULTRA</div><div class="tl-body">CIA-Direktor Allen Dulles autorisiert das Programm formal. Es soll eine „Fähigkeit zum verdeckten Einsatz biologischer und chemischer Materialien" für gegenwärtige und künftige geheime Operationen schaffen. Das Budget wird von den üblichen Finanzkontrollen ausgenommen.</div></div>
+      <div class="tl-item"><div class="tl-date">November 1953</div><div class="tl-title">Tod von Frank Olson</div><div class="tl-body">Am 28. November stürzt der Army-Chemiker Frank Olson aus einem Hotelfenster im Statler Hilton, New York — neun Tage nachdem Gottlieb und TSS-Mitarbeiter ihm bei einem CIA-Retreat am Deep Creek Lake heimlich LSD in einen Cocktail gemischt hatten. Offiziell als Suizid eingestuft.</div></div>
+      <div class="tl-item"><div class="tl-date">1954</div><div class="tl-title">Eli Lilly wird LSD-Hauptlieferant</div><div class="tl-body">Der Pharmakonzern Eli Lilly entwickelt ein Verfahren zur LSD-Produktion in „Tonnagen-Mengen" und wird zum Hauptlieferanten der CIA. Die CIA kaufte zuvor den Weltvorrat an LSD für 240.000 Dollar.</div></div>
+      <div class="tl-item"><div class="tl-date">1955–1957</div><div class="tl-title">Operation Midnight Climax</div><div class="tl-body">Unter Subprojekt 3 und 42 betreibt der Bundesdrogenfahnder George White (Deckname „Morgan Hall") Safehouses in New York und San Francisco. Dort werden ahnungslosen Gästen heimlich Drogen verabreicht, während die CIA sie durch Einwegspiegel filmt.</div></div>
+      <div class="tl-item"><div class="tl-date">1957+</div><div class="tl-title">Subprojekt 68 — Dr. Ewen Cameron</div><div class="tl-body">Am Allan Memorial Institute in Montreal (McGill University) führt der Psychiater Donald Ewen Cameron „psychic driving" und „depatterning" durch: wochenlange Schlafinduktion, massive Elektroschocks und Dauertonbänder, um Persönlichkeiten auszulöschen und „neu zu programmieren".</div></div>
+      <div class="tl-item"><div class="tl-date">1960</div><div class="tl-title">Gottliebs Ernüchterung</div><div class="tl-body">Gottlieb schreibt, es sei „keine wirksame Knockout-Pille, kein Wahrheitsserum, kein Aphrodisiakum und keine Anwerbungspille" bekannt. Der Geist lasse sich zerstören, aber nicht kontrollieren.</div></div>
+      <div class="tl-item"><div class="tl-date">1963</div><div class="tl-title">IG-Bericht von John Earman</div><div class="tl-body">Der Bericht des CIA-Generalinspekteurs bringt die Führung dazu, die Tests an ahnungslosen US-Bürgern zu überdenken. Das Programm läuft aus und wird 1964 durch das harmlosere MK-SEARCH ersetzt.</div></div>
+      <div class="tl-item major"><div class="tl-date">1973</div><div class="tl-title">Vernichtung der Akten</div><div class="tl-body">Vor seinem Ausscheiden ordnet CIA-Direktor Richard Helms die Vernichtung aller MK-ULTRA-Unterlagen an. Gottlieb fährt persönlich zum Archiv und lässt sieben Kisten mit Fortschrittsberichten schreddern — der Leiter des Archivs hatte sich schriftlich dagegen ausgesprochen, wurde aber überstimmt.</div></div>
+      <div class="tl-item"><div class="tl-date">1974</div><div class="tl-title">Enthüllungen beginnen</div><div class="tl-body">Der Journalist Seymour Hersh veröffentlicht im Dezember 1974 in der <em>New York Times</em> die „Family Jewels"-Story über CIA-Missbräuche im Inland und stößt die Ermittlungen an.</div></div>
+      <div class="tl-item"><div class="tl-date">1975</div><div class="tl-title">Church Committee &amp; Rockefeller Commission</div><div class="tl-body">Der Senatsausschuss unter Senator Frank Church und die präsidiale Rockefeller-Kommission untersuchen das Programm. Sie sind auf Zeugenaussagen und die wenigen erhaltenen Dokumente angewiesen — die meisten Akten waren vernichtet.</div></div>
+      <div class="tl-item major"><div class="tl-date">1977</div><div class="tl-title">Die geretteten sieben Kisten</div><div class="tl-body">Ein Archivar findet bei einer FOIA-Anfrage sieben <em>falsch abgelegte</em> Kisten mit MK-ULTRA-Finanzunterlagen, die der Vernichtung entgingen: rund 20.000 Dokumente. Sie führen zu Senatsanhörungen und belegen die 149 Subprojekte.</div></div>
+      <div class="tl-item"><div class="tl-date">1995 / 2001</div><div class="tl-title">Weitere Freigaben</div><div class="tl-body">Weitere Dokumente werden freigegeben, u.a. 1995 die Gottlieb-Aussagen im Zivilprozess Glickman gegen die CIA, und 2001 weitere Bestände.</div></div>
+      <div class="tl-item"><div class="tl-date">2017</div><div class="tl-title">CREST geht online</div><div class="tl-body">Nach einer Klage von MuckRock (mit Emma Best) stellt die CIA ihr CREST-Archiv (rund 800.000 Dokumente) online — zuvor nur an vier Computern außerhalb Washingtons einsehbar.</div></div>
+      <div class="tl-item"><div class="tl-date">2024–2025</div><div class="tl-title">Wissenschaftliche Aufarbeitung</div><div class="tl-body">Das National Security Archive und ProQuest veröffentlichen die Sammlung „CIA and the Behavioral Sciences" mit über 1.200 Dokumenten. 2025 werden die lange geheimen Gottlieb-Aussagen vor dem Church Committee erstmals vollständig öffentlich.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="figuren">
+  <div class="wrap">
+    <h2>Schlüsselfiguren</h2>
+    <div class="sec-sub">Die Akteure</div>
+    <div class="grid">
+      <div class="card"><div class="role">Programmleiter</div><h3>Sidney Gottlieb</h3><p>Chemiker, Chef des Technical Services Staff (TSS) bzw. der Technical Services Division (TSD). Leiter von MK-ULTRA, von Stephen Kinzer „Poisoner in Chief" genannt. Genehmigte die Subprojekte, leitete die LSD-Experimente und vernichtete 1973 die Akten. Verstarb 1999.</p></div>
+      <div class="card"><div class="role">CIA-Direktor</div><h3>Allen Dulles</h3><p>CIA-Direktor 1953–1961. Genehmigte MK-ULTRA am 13. April 1953 und erweiterte zuvor Bluebird zu Artichoke. Sein Bruder John Foster Dulles war US-Außenminister.</p></div>
+      <div class="card"><div class="role">CIA-Direktor</div><h3>Richard Helms</h3><p>Aufstieg vom Chief of Operations zum CIA-Direktor (1966–1973). Unterstützte das Programm über Jahre und gab 1973 den Befehl zur Vernichtung der MK-ULTRA-Akten.</p></div>
+      <div class="card"><div class="role">Opfer</div><h3>Frank Olson</h3><p>Army-Chemiker (Special Operations Division, Fort Detrick). Wurde 1953 heimlich mit LSD versetzt und starb neun Tage später nach einem Fenstersturz im New Yorker Statler Hilton. Sein Tod machte MK-ULTRA öffentlich.</p></div>
+      <div class="card"><div class="role">Psychiater · SP 68</div><h3>Donald Ewen Cameron</h3><p>Leiter des Allan Memorial Institute (Montreal). Entwickelte „psychic driving" und „depatterning": Schlafinduktion, massive Elektroschocks und Tonbänder zur Persönlichkeitsauslöschung — finanziert über MK-ULTRA.</p></div>
+      <div class="card"><div class="role">Safehouse-Betreiber</div><h3>George White</h3><p>Bundesdrogenfahnder. Betrieb als „Morgan Hall" die MK-ULTRA-Safehouses in New York und San Francisco (Operation Midnight Climax), wo ahnungslosen Gästen heimlich Drogen verabreicht wurden.</p></div>
+      <div class="card"><div class="role">CIA-Monitor</div><h3>Robert V. Lashbrook</h3><p>CIA-Monitor zahlreicher Subprojekte. War beim Retreat am Deep Creek Lake und in der Nacht von Olsons Tod dabei.</p></div>
+      <div class="card"><div class="role">Zauberer · SP 4/15/19</div><h3>John Mulholland</h3><p>Bühnenmagier. Verfasste für die CIA ein Handbuch der Taschenspielertricks für verdeckte Operationen — 2009 als „The Official CIA Manual of Trickery and Deception" veröffentlicht.</p></div>
+      <div class="card"><div class="role">Forscher · SP 7</div><h3>Harold Abramson</h3><p>Arzt. Leitete LSD-Grundlagenforschung über die Geschickter Foundation als Tarnorganisation. Unterthemen: Gedächtnisstörung, Diskreditierung durch abweichendes Verhalten, Suggestibilität.</p></div>
+      <div class="card"><div class="role">Forscher · SP 8/10</div><h3>Robert Hyde</h3><p>Boston Psychopathic Hospital. Erster US-Amerikaner auf einem LSD-Trip (1949); erforschte LSD und verwandte Substanzen in mehreren Subprojekten.</p></div>
+      <div class="card"><div class="role">Forscher · SP 9</div><h3>Carl Pfeiffer</h3><p>Pharmakologie-Professor, Emory University. Leitete vier Subprojekte, die mit Drogen (u.a. LSD) psychotische Zustände induzierten — an Gefangenen und Jugendlichen.</p></div>
+      <div class="card"><div class="role">Forscher</div><h3>Harris Isbell</h3><p>Leiter der Suchtforschung in Lexington (Kentucky). Führte LSD-Experimente an „freiwilligen" Häftlingen durch, teils über Monate.</p></div>
+      <div class="card"><div class="role">Neurologe</div><h3>Harold Wolff</h3><p>Cornell Medical Center. Betreiber der „Human Ecology Society" als Tarnorganisation; entwickelte Drogen-plus-Deprivation-Kombinationen zur Geistesauslöschung.</p></div>
+      <div class="card"><div class="role">Hypnose-Forscher</div><h3>Alden Sears</h3><p>Erforschte Hypnose als Gedächtnisverstärker, Lernhilfe und Lügendetektor-Täuschung (Subprojekt 5), u.a. an den Universitäten Minnesota und Denver.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="subprojekte">
+  <div class="wrap">
+    <h2>Subprojekte</h2>
+    <div class="sec-sub">Auswahl dokumentierter Subprojekte · vollständige 149 im Briefing Book</div>
+    <div class="filters"><input type="search" id="spSearch" placeholder="Suchen: Nummer, Institution, Forscher, Stichwort…" aria-label="Subprojekte durchsuchen"></div>
+    <div class="sp-list" id="spList"></div>
+    <p style="color:var(--dim);font-size:13px;margin-top:14px">Die vollständige Übersicht aller 149 Subprojekte mit Kurzbeschreibungen findet sich im <a href="https://archive.org/details/MKULTRABriefingBookListOfSubprojectsWithBriefDescriptionsJanuary1976" target="_blank" rel="noopener">MKULTRA Briefing Book (Januar 1976, 399 Seiten)</a>.</p>
+  </div>
+</section>
+
+<section id="dokumente">
+  <div class="wrap">
+    <h2>Originaldokumente</h2>
+    <div class="sec-sub">Freigegebene CIA-Dokumente (gemeinfrei, US-Regierung)</div>
+    <p style="color:var(--muted);max-width:760px">Die folgenden Scans sind echte, über das CREST-Archiv freigegebene CIA-Dokumente. Klick auf ein Dokument öffnet die hochauflösende Ansicht; der Link führt zum Original im Internet Archive.</p>
+    <div class="gallery" id="gallery"></div>
+    <div class="note">Die hier gezeigten Dokumente wurden über das CREST-Programm der CIA freigegeben und über das Internet Archive archiviert. US-Regierungsdokumente sind gemeinfrei. Weitere Originale: <a href="https://www.cia.gov/readingroom/search/site/mkultra" target="_blank" rel="noopener" style="color:var(--accent)">CIA FOIA Reading Room</a> und <a href="https://archive.org/details/cia-collection" target="_blank" rel="noopener" style="color:var(--accent)">Internet Archive CIA Collection</a>.</div>
+  </div>
+</section>
+
+<section id="glossar">
+  <div class="wrap">
+    <h2>Glossar</h2>
+    <div class="sec-sub">Begriffe von A bis Z</div>
+    <div class="glossary">
+      <div class="gterm"><div class="gt">Allan Memorial Institute</div><p>Psychiatrische Klinik der McGill University, Montreal. Schauplatz von Camerons „depatterning"-Experimenten (Subprojekt 68).</p></div>
+      <div class="gterm"><div class="gt">Artichoke (Operation)</div><p>Deckname des Mind-Control-Programms ab 1951, Nachfolger von Bluebird, Vorläufer von MK-ULTRA.</p></div>
+      <div class="gterm"><div class="gt">Bluebird (Project)</div><p>Ursprüngliches Mind-Control-Programm der Truman-Ära, unter Leitung von Morse Allen.</p></div>
+      <div class="gterm"><div class="gt">BZ</div><p>Halluzinogen (Quinuclidinylbenzilat), von der Army in den 1950er/60er Jahren an „freiwilligen" Soldaten getestet.</p></div>
+      <div class="gterm"><div class="gt">Cameron, Ewen</div><p>Kanadischer Psychiater, Leiter der „depatterning"-Experimente am Allan Memorial Institute.</p></div>
+      <div class="gterm"><div class="gt">Church Committee</div><p>US-Senatsausschuss unter Frank Church (1975), deckte MK-ULTRA öffentlich auf.</p></div>
+      <div class="gterm"><div class="gt">CREST</div><p>Das digitale Archiv der CIA für freigegebene Dokumente; seit 2017 online.</p></div>
+      <div class="gterm"><div class="gt">Cut-out / Tarnorganisation</div><p>Zwischengeschaltete Stiftung (z.B. Geschickter Fund, Human Ecology Society), über die CIA-Gelder verschleiert an Forscher flossen.</p></div>
+      <div class="gterm"><div class="gt">Depatterning</div><p>Camersons Methode, Persönlichkeit durch Schlafentzug, Elektroschocks und Dauertonbänder „auszulöschen".</p></div>
+      <div class="gterm"><div class="gt">Dulles, Allen</div><p>CIA-Direktor 1953–1961, genehmigte MK-ULTRA am 13. April 1953.</p></div>
+      <div class="gterm"><div class="gt">Earman, John</div><p>CIA-Generalinspekteur, verfasste 1963 den kritischen IG-Bericht zu MK-ULTRA.</p></div>
+      <div class="gterm"><div class="gt">Elektroschock (ECT)</div><p>Eingesetzt in Camerons Experimenten und anderen Subprojekten zur Bewusstseinsveränderung.</p></div>
+      <div class="gterm"><div class="gt">Eli Lilly</div><p>Pharmakonzern, ab 1954 CIA-Hauptlieferant für LSD in „Tonnagen-Mengen".</p></div>
+      <div class="gterm"><div class="gt">FOIA</div><p>Freedom of Information Act — US-Informationsfreiheitsgesetz, Grundlage der Freigaben und Aufdeckung.</p></div>
+      <div class="gterm"><div class="gt">Fort Detrick</div><p>Armeestützpunkt in Maryland, Sitz der Special Operations Division (SOD), Franks Olsons Arbeitgeber.</p></div>
+      <div class="gterm"><div class="gt">Geschickter Fund</div><p>Tarnstiftung (Charles Geschickter), über die CIA-Gelder an Forscher wie Abramson und Pfeiffer flossen.</p></div>
+      <div class="gterm"><div class="gt">Gottlieb, Sidney</div><p>MK-ULTRA-Chef, „Poisoner in Chief", Chef des TSS/TSD.</p></div>
+      <div class="gterm"><div class="gt">Helms, Richard</div><p>CIA-Direktor, ordnete 1973 die Vernichtung der MK-ULTRA-Akten an.</p></div>
+      <div class="gterm"><div class="gt">Hofmann, Albert</div><p>Schweizer Chemiker, synthetisierte 1938 LSD bei Sandoz, entdeckte 1943 dessen Wirkung.</p></div>
+      <div class="gterm"><div class="gt">Human Ecology Society</div><p>Tarnorganisation (Harold Wolff), finanzierte u.a. Camerons Experimente.</p></div>
+      <div class="gterm"><div class="gt">Hypnose</div><p>Erforscht als Gedächtnisverstärker, Lernhilfe und Lügendetektor-Täuschung (Subprojekt 5).</p></div>
+      <div class="gterm"><div class="gt">Isbell, Harris</div><p>Suchtforscher in Lexington, führte LSD-Experimente an Häftlingen durch.</p></div>
+      <div class="gterm"><div class="gt">Kinzer, Stephen</div><p>Journalist, Autor von „Poisoner in Chief" (2019), dem Standardwerk über Gottlieb.</p></div>
+      <div class="gterm"><div class="gt">Lashbrook, Robert V.</div><p>CIA-Monitor mehrerer Subprojekte, beim Deep-Creek-Retreat und Olsons Tod dabei.</p></div>
+      <div class="gterm"><div class="gt">LSD (LSD-25)</div><p>Zentrales Mittel von MK-ULTRA, heimlich verabreicht an ahnungslose Versuchspersonen.</p></div>
+      <div class="gterm"><div class="gt">Midnight Climax</div><p>Deckname für die Safehouse-Operationen George Whites in New York und San Francisco.</p></div>
+      <div class="gterm"><div class="gt">MKNAOMI</div><p>Schwesterprogramm für biologische und chemische Waffen, dessen Akten 1973 ebenfalls vernichtet wurden.</p></div>
+      <div class="gterm"><div class="gt">MK-SEARCH</div><p>Nachfolgeprogramm ab 1964, nach dem Ende von MK-ULTRA.</p></div>
+      <div class="gterm"><div class="gt">Morgan Hall</div><p>Deckname von George White bei den Safehouse-Operationen.</p></div>
+      <div class="gterm"><div class="gt">Mulholland, John</div><p>Magier, verfasste das CIA-Handbuch für Täuschungstechniken (Subprojekte 4, 15, 19).</p></div>
+      <div class="gterm"><div class="gt">Nuremberg-Kodex</div><p>Medizinethischer Kodex nach dem Zweiten Weltkrieg; die Menschenversuche ohne Einwilligung verletzten ihn.</p></div>
+      <div class="gterm"><div class="gt">Olson, Frank</div><p>Army-Chemiker, starb 1953 nach heimlicher LSD-Verabreichung.</p></div>
+      <div class="gterm"><div class="gt">Paperclip (Operation)</div><p>US-Programm zur Übernahme ehemaliger Nazi-Wissenschaftler, teils verknüpft mit den Forschungsnetzwerken.</p></div>
+      <div class="gterm"><div class="gt">Perfect Concussion</div><p>Subprojekt 54 (Navy): Unterschall-Frequenzstöße zur Gedächtnislöschung — wurde nie umgesetzt.</p></div>
+      <div class="gterm"><div class="gt">Psychic Driving</div><p>Camerons Methode, unter Drogen kontinuierlich aufgezeichnete Botschaften einzuspielen.</p></div>
+      <div class="gterm"><div class="gt">Rockefeller Commission</div><p>Präsidialkommission unter Gerald Ford (1975), untersuchte CIA-Inlandsaktivitäten.</p></div>
+      <div class="gterm"><div class="gt">Rivea Corymbosa</div><p>Pflanze, deren Alkaloide Subprojekt 1 (Princeton) auf ZNS-Wirkstoffe untersuchte.</p></div>
+      <div class="gterm"><div class="gt">Safehouse</div><p>Getarnte Wohnung, in der ahnungslosen Gästen heimlich Drogen verabreicht wurden.</p></div>
+      <div class="gterm"><div class="gt">Sandoz</div><p>Schweizer Pharmafirma, ursprünglicher LSD-Hersteller und -Lieferant.</p></div>
+      <div class="gterm"><div class="gt">Sensorische Deprivation</div><p>Reizentzug zur Bewusstseinsbeeinflussung, u.a. in Wolffs Forschungsprogramm.</p></div>
+      <div class="gterm"><div class="gt">TSS / TSD</div><p>Technical Services Staff / Division — Gottliebs Abteilung, die MK-ULTRA betrieb.</p></div>
+      <div class="gterm"><div class="gt">Truth Serum</div><p>Gesuchtes „Wahrheitsserum" für Verhöre — eines der Hauptziele von MK-ULTRA.</p></div>
+      <div class="gterm"><div class="gt">Unwitting Testing</div><p>Experimente an Versuchspersonen ohne deren Wissen oder Einwilligung.</p></div>
+      <div class="gterm"><div class="gt">White, George</div><p>Bundesdrogenfahnder und Safehouse-Betreiber („Morgan Hall").</p></div>
+      <div class="gterm"><div class="gt">Wolff, Harold</div><p>Neurologe (Cornell), Kopf der Human Ecology Society.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quellen">
+  <div class="wrap">
+    <h2>Quellen</h2>
+    <div class="sec-sub">Primär- und Sekundärquellen</div>
+    <p style="color:var(--muted);margin-bottom:14px">Alle Inhalte dieses Archivs stammen aus öffentlich zugänglichen, freigegebenen Quellen. Kein Inhalt ist erfunden; Zitate und Zahlen sind direkt belegt.</p>
+    <ul class="src">
+      <li><a href="https://www.cia.gov/readingroom/search/site/mkultra" target="_blank" rel="noopener">CIA FOIA Electronic Reading Room — MKULTRA-Suche</a> (cia.gov)</li>
+      <li><a href="https://archive.org/details/MKULTRABriefingBookListOfSubprojectsWithBriefDescriptionsJanuary1976" target="_blank" rel="noopener">MKULTRA Briefing Book — Liste aller 149 Subprojekte, Januar 1976</a> (Internet Archive)</li>
+      <li><a href="https://archive.org/details/cia-collection" target="_blank" rel="noopener">Internet Archive — CIA Collection (CREST-Mirror)</a></li>
+      <li><a href="https://nsarchive.gwu.edu/briefing-book/dnsa-intelligence/2024-12-23/cia-behavior-control-experiments-focus-new-scholarly" target="_blank" rel="noopener">National Security Archive — CIA Behavior Control Experiments</a></li>
+      <li><a href="https://nsarchive.gwu.edu/briefing-book/dnsa-intelligence/2025-10-30/top-secret-testimony-cias-mkultra-chief-50-years-later" target="_blank" rel="noopener">National Security Archive — Gottlieb-Testimony, 50 Jahre später (2025)</a></li>
+      <li><a href="https://www.intelligence.senate.gov/wp-content/uploads/2024/08/sites-default-files-hearings-95mkultra.pdf" target="_blank" rel="noopener">US-Senat — Project MKULTRA, the CIA's Program of Research in Behavioral Modification</a> (Anhörungsbericht, PDF)</li>
+      <li><a href="https://en.wikipedia.org/wiki/MKUltra" target="_blank" rel="noopener">Wikipedia — MKUltra</a> (Übersicht mit weiterführenden Belegen)</li>
+      <li><a href="https://www.britannica.com/topic/MK-ULTRA" target="_blank" rel="noopener">Encyclopaedia Britannica — MK-ULTRA</a></li>
+      <li><a href="https://www.seastorm.com/related_research/mkultra/subprojects/" target="_blank" rel="noopener">Seastorm — Subproject Directory (1–149)</a></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mono">PROJECT MK-ULTRA · ARCHIV</div>
+    <p style="margin-top:8px">Zusammengestellt aus freigegebenen öffentlichen Quellen. Alle Originaldokumente sind US-Regierungswerke (gemeinfrei).<br>Diese Seite ist ein privates, unabhängiges Archivprojekt und steht in keiner Verbindung zur CIA oder zur US-Regierung.</p>
+  </div>
+</footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Dokumentansicht">
+  <button class="close" id="lbClose" aria-label="Schließen">&times;</button>
+  <img id="lbImg" src="" alt="Originaldokument in Großansicht">
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<script>
+const SUBPROJECTS = [
+  {no:1, name:"Alkaloide der Rivea Corymbosa", who:"Princeton University", years:"1953–1954", monitor:"Robert V. Lashbrook", desc:"Isolierung und Charakterisierung der Alkaloide von Ipomoea (Rivea corymbosa); Identifikation zentralnervös wirksamer Substanzen.", infamous:false},
+  {no:2, name:"Verhaltensmodifikation & unbemerkte Verabreichung", who:"James Hamilton, Stanford University", years:"1953–1958", monitor:"Robert V. Lashbrook", desc:"Erforschung synergistischer Drogenwirkungen zur Bewusstseinsausschaltung (Tierversuche) und Methoden, Patienten Drogen ohne ihr Wissen zu verabreichen.", infamous:false},
+  {no:3, name:"Operation Midnight Climax (Safehouses)", who:"George White (alias Morgan Hall), New York & San Francisco", years:"1953–1956", monitor:"Sidney Gottlieb, Robert V. Lashbrook", desc:"Realistische Feldtests von TSS-Forschungsartikeln; die berüchtigten Safehouses, in denen ahnungslosen Gästen heimlich Drogen verabreicht wurden.", infamous:true},
+  {no:4, name:"Zauberhandbuch für Geheimoperationen", who:"John Mulholland", years:"1953–1954", monitor:"Sidney Gottlieb, Robert V. Lashbrook", desc:"Finanzierung eines Bühnenmagiers zur Erstellung eines Handbuchs der Täuschungskunst — später als „Official CIA Manual of Trickery and Deception“ veröffentlicht.", infamous:false},
+  {no:5, name:"Hypnose-Forschung", who:"Alden Sears, Univ. Minnesota & Denver", years:"1953–1956", monitor:"(geschwärzt)", desc:"Nachweis der Hypnose-Möglichkeiten für Geheimdienste: Gedächtnisverstärker, Lernhilfe, Lügendetektor-Täuschung; Anfälligkeit bestimmter Persönlichkeitstypen.", infamous:false},
+  {no:6, name:"Zuverlässige LSD-Quelle", who:"Eli Lilly Company, Indianapolis", years:"1953–1955", monitor:"Sidney Gottlieb, Robert V. Lashbrook", desc:"Aufbau einer zuverlässigen LSD-Produktion in den USA (zuvor Sandoz, Schweiz) und Suche nach weiteren natürlichen Hypnotika.", infamous:false},
+  {no:7, name:"LSD-Grundlagenforschung", who:"Harold Abramson", years:"1952–1956", monitor:"Sidney Gottlieb", desc:"LSD-Basis- und Therapieforschung; Inhaltsanalyse von Versuchsdaten zu Gedächtnisstörung, Diskreditierung, Suggestibilität und Abhängigkeitserzeugung.", infamous:false},
+  {no:8, name:"Biochemische & psychiatrische LSD-Studien", who:"Robert Hyde, Worcester Foundation", years:"1953–1955", monitor:"Robert V. Lashbrook", desc:"Biochemische, neurophysiologische, soziologische und klinisch-psychiatrische Aspekte von LSD und verwandten Stoffen (z.B. LAE) an menschlichen Versuchspersonen.", infamous:false},
+  {no:9, name:"Dämpfungsmittel-Studien", who:"Carl Pfeiffer, Emory University & Univ. Illinois", years:"1954–1955", monitor:"Sidney Gottlieb", desc:"Untersuchung depressiv wirkender Drogen zur Kontrolle manischer Patienten sowie für Alkoholiker und Schizophrene.", infamous:false},
+  {no:10, name:"LSD + Alkohol", who:"Robert Hyde", years:"1952–1957", monitor:"Sidney Gottlieb, Robert V. Lashbrook", desc:"Wirkung von LSD und Alkohol bei Personen verschiedener Persönlichkeitskategorien.", infamous:false},
+  {no:42, name:"Safehouse San Francisco (Morgan Hall)", who:"George White, San Francisco", years:"—", monitor:"—", desc:"Einrichtung einer Einrichtung zur verdeckten Verabreichung physiologisch aktiver Substanzen an ahnungslose Versuchspersonen; Fortsetzung von Subprojekt 3.", infamous:true},
+  {no:54, name:"„Perfect Concussion“ (Navy)", who:"US Navy", years:"—", monitor:"—", desc:"Streng geheimes Programm zu Unterschall-Frequenzstößen zur Gedächtnisauslöschung. Wurde nie umgesetzt.", infamous:false},
+  {no:68, name:"Psychic Driving & Depatterning", who:"Donald Ewen Cameron, Allan Memorial Institute, Montreal", years:"ab 1957", monitor:"—", desc:"Eines der berüchtigtsten Subprojekte: kontinuierliche Botschafts-Wiedergabe unter Drogen, induzierter Schlaf und massive Elektroschocks zur Auslöschung und Neuprogrammierung der Persönlichkeit.", infamous:true},
+  {no:104, name:"Petroleum-Sabotage", who:"University of Houston", years:"1960–1961", monitor:"—", desc:"Erforschung von Mikroorganismen zur Zersetzung von Erdölprodukten — für mögliche Sabotage.", infamous:false},
+  {no:105, name:"Staphylokokken-Toxine", who:"University of Wisconsin", years:"1950–1951", monitor:"—", desc:"Studie virulenter und nicht-virulenter Staphylokokken und ihrer Toxine zur biochemischen Identifikation.", infamous:false},
+  {no:107, name:"Psychologen-Reiseförderung", who:"American Psychological Association", years:"—", monitor:"—", desc:"Stipendium zur Förderung der Reisen ausgewählter Psychologen, um Kontakte zu ausländischen Psychologen zu knüpfen und den Forschungsstand zu erfassen.", infamous:false},
+  {no:119, name:"Bioelektrische Fernsteuerung", who:"Texas Christian University", years:"1960", monitor:"Sidney Gottlieb", desc:"Literaturstudie zu bioelektrischen Signalen des Menschen und der Aktivierung von Verhalten durch Fernsteuerung.", infamous:false},
+  {no:120, name:"Drogenwirkung auf Tier-ZNS", who:"—", years:"—", monitor:"—", desc:"Aufbau von Laborverfahren zur Prüfung von Drogenwirkungen auf das zentrale Nervensystem von Tieren.", infamous:false}
+];
+
+const DOCUMENTS = [
+  {file:"cia-readingroom-document-cia-rdp78-04913a000100030013-8.jpg", title:"Subprojekt 9 — Genehmigung", meta:"9. Juni 1953 · Gottlieb-Memo", url:"https://archive.org/details/cia-readingroom-document-cia-rdp78-04913a000100030013-8"},
+  {file:"CIA-RDP78-04913A000100030106-5.jpg", title:"Subprojekt 3 — Midnight Climax", meta:"CREST · freigegeben", url:"https://archive.org/details/CIA-RDP78-04913A000100030106-5"},
+  {file:"CIA-RDP78-04913A000100030007-5.jpg", title:"Subprojekt 11", meta:"CREST · freigegeben", url:"https://archive.org/details/CIA-RDP78-04913A000100030007-5"},
+  {file:"CIA-RDP78-04913A000100030036-3.jpg", title:"Subprojekt 2 — Stanford", meta:"CREST · freigegeben", url:"https://archive.org/details/CIA-RDP78-04913A000100030036-3"},
+  {file:"CIA-RDP78-04913A000100030025-5.jpg", title:"Subprojekt 6 — Eli Lilly", meta:"CREST · freigegeben", url:"https://archive.org/details/CIA-RDP78-04913A000100030025-5"},
+  {file:"CIA-RDP78-04913A000100030014-7.jpg", title:"Subprojekt 8 — Hyde/LSD", meta:"CREST · freigegeben", url:"https://archive.org/details/CIA-RDP78-04913A000100030014-7"},
+  {file:"CIA-RDP81-00261R000300050017-0.jpg", title:"Freigabe der MKULTRA-Dokumente", meta:"2. August 1977", url:"https://archive.org/details/CIA-RDP81-00261R000300050017-0"},
+  {file:"MKULTRABriefingBookListOfSubprojectsWithBriefDescriptionsJanuary1976.jpg", title:"MKULTRA Briefing Book", meta:"Januar 1976 · 149 Subprojekte", url:"https://archive.org/details/MKULTRABriefingBookListOfSubprojectsWithBriefDescriptionsJanuary1976"}
+];
+
+// Render subprojects
+const spList = document.getElementById('spList');
+SUBPROJECTS.forEach(sp => {
+  const el = document.createElement('div');
+  el.className = 'sp';
+  el.dataset.search = (sp.no + ' ' + sp.name + ' ' + sp.who + ' ' + sp.desc).toLowerCase();
+  el.innerHTML = `
+    <div class="sp-head">
+      <span class="sp-no">SP ${sp.no}</span>
+      <span class="sp-name">${sp.name}</span>
+      ${sp.infamous ? '<span class="red">■ BERICHTIGT</span>' : ''}
+    </div>
+    <div class="sp-meta">${sp.who} · ${sp.years}${sp.monitor && sp.monitor !== '—' ? ' · Monitor: ' + sp.monitor : ''}</div>
+    <p>${sp.desc}</p>`;
+  spList.appendChild(el);
+});
+
+document.getElementById('spSearch').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.sp').forEach(el => {
+    el.classList.toggle('hidden', q && !el.dataset.search.includes(q));
+  });
+});
+
+// Render gallery
+const gallery = document.getElementById('gallery');
+DOCUMENTS.forEach(d => {
+  const el = document.createElement('div');
+  el.className = 'doc';
+  el.innerHTML = `
+    <img src="assets/img/thumbs/${d.file}" alt="${d.title}" loading="lazy">
+    <div class="cap"><b>${d.title}</b><span>${d.meta}</span></div>`;
+  el.addEventListener('click', () => openLb(d));
+  gallery.appendChild(el);
+});
+
+// Lightbox
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+function openLb(d){
+  lbImg.src = 'assets/img/' + d.file;
+  lbCap.innerHTML = `<b>${d.title}</b> — ${d.meta}<br><a href="${d.url}" target="_blank" rel="noopener">Original im Internet Archive öffnen ↗</a>`;
+  lb.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb(){ lb.classList.remove('show'); document.body.style.overflow=''; }
+document.getElementById('lbClose').addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if(e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLb(); });
+</script>
+</body>
+</html>
